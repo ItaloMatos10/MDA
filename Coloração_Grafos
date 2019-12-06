@@ -1,0 +1,23 @@
+#define UGraph Graph
+/* Esta função calcula uma coloração válida dos vértices do grafo não-dirigido G e devolve o número de cores usadas. A coloração é armazenada no vetor color[]. */
+int UGRAPHseqColoring( UGraph G, int *color)
+{ 
+   int k = 0;
+   for (vertex v = 0; v < G->V; ++v) color[v] = -1;
+
+   for (vertex v = 0; v < G->V; ++v) {
+      // as cores são 0..k-1
+      bool available[100];
+      int c; 
+      for (c = 0; c < k; ++c) available[c] = true;
+      for (link a = G->adj[v]; a != NULL; a = a->next) {
+         if (color[a->w] != -1)
+            available[color[a->w]] = false;
+      } // A
+      c = 0;
+      while (c < k && !available[c]) ++c;
+      if (c < k) color[v] = c;
+      else color[v] = k++;
+   }
+   return k;
+}
